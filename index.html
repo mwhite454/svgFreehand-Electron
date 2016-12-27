@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SVG Freehand</title>
+  <script src="js/menu.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./css/photon.min.css">
+</head>
+
+
+<body>
+  <div class="window">
+    <header class="toolbar toolbar-header">
+      <h1 class="title"> SVG Freehand </h1>
+    </header>
+    <div class="window-content">
+      <div class="pane-group">
+        <div class="pane">
+          <main>
+            <svg width="300" height="300" id="svgPort"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink" style="background: cyan">
+              <!-- This is the element before translation and rotation are applied -->
+              <rect x="50" y="50" height="100" width="100" style="stroke:#000; fill: #0086B2" fill-opacity=0.2 stroke-opacity=0.2></rect>
+              <!-- Now we add a text element and apply rotate and translate to both -->
+              <rect x="50" y="50" height="100" width="100" style="stroke:#000; fill: #0086B2" transform="translate(30) rotate(45 50 50)"></rect>
+              <polyline id ='currentDrawing' points='0,0 0,0' style='stroke:black; stroke-width:1; fill: none' />
+            </svg>
+          <main>
+        </div>
+      <div id="sidebar" class="pane-sm sidebar" >
+        <div id="brushes">
+        </div>
+        <div id="brushMeta">
+        </div>
+        <div id="palette">
+        </div>
+        <div id="groups">
+        </div>
+        <div id="elementTree">
+          <ul id="elementList">
+          </ul>
+        </div>
+      </div>
+   </div>
+   <footer class="toolbar toolbar-footer">
+     <h1 class="title">Footer</h1>
+   </footer>
+  </div>
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+  </script>
+  <script language="javascript" type="text/javascript" src="js/mousePos.js"></script>
+  <script language="javascript" type="text/javascript" src="js/svgFree.js"></script>
+  <script language="javascript" type="text/javascript" src="js/elementTree.js"></script>
+</body>
+</html>
