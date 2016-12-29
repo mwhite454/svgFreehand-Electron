@@ -14,7 +14,7 @@
 
 
 <body>
-  <div class="window container">
+  <div class="window container-fluid">
     <header class="toolbar toolbar-header row">
         <h1 class="title col-md-6"> SVG Freehand </h1>
 
@@ -42,10 +42,15 @@
       <div class="pane-group">
         <div class="pane col-md-8">
           <main id="desk">
-            <svg width="300" height="300" id="svgPort"
+            <svg  id="svgPort"
               xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" style="background: cyan">
+              xmlns:xlink="http://www.w3.org/1999/xlink" style="background: cyan" currentScale="1" width="800px" height="600px" viewBox="0 0 800 600">
+              <g id="viewport" transform="scale(1)">
               <polyline id ='currentDrawing' points='0,0 0,0' style='stroke:black; stroke-width:1; fill: none' />
+              </g>
+              <g id="cursorView" transform="scale(1)">
+                <circle id="cursorDot" cx="0" cy="0" r="4" style='stroke: none; stroke-width:0; fill: red'/>
+              </g>
             </svg>
           <main>
         </div>
@@ -130,21 +135,6 @@
     // You can also require other files to run in this process
     require('./renderer.js')
 
-    svgPanZoom('#svgPort', {
-  panEnabled: false
-, controlIconsEnabled: true
-, zoomEnabled: true
-, dblClickZoomEnabled: true
-, mouseWheelZoomEnabled: true
-, preventMouseEventsDefault: true
-, zoomScaleSensitivity: 0.2
-, minZoom: 0.5
-, maxZoom: 10
-, fit: true
-, contain: false
-, center: true
-, refreshRate: 'auto'
-});
   </script>
 </script>
   <script>window.$ = window.jQuery = require('jquery');</script>

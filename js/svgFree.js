@@ -4,18 +4,20 @@ var globals = {
                 "drawing" : [],
                 "currDraw" : "",
                 "smoothing": "4",
-                "currentElement" : 0
+                "currentElement" : 0,
+                "zoomRate" : 0.1,
+                "panRate" : 10,
+                "currentZoom" : 1,
+                "currentViewBox" : ""
               };
 
 
 ///Event listeners
-window.addEventListener("load", function(){
-  globals.currDraw = document.getElementById("svgPort").innerHTML;
-  globals.paper = document.getElementById('svgPort');
+window.addEventListener('load', function(){
   globals.desk = document.getElementById('desk');
+  window.addEventListener('keydown', processKeyPress, true);
+  //window.addEventListener('wheel', MouseWheelHandler, false);
   prepPort();
-  //set svgPort width and height based on window size
-  //setPortSize();
 });
 
 function prepPort(){
@@ -29,9 +31,14 @@ function prepPort(){
 
   }
   globals.paper = document.getElementById('svgPort');
+  globals.currDraw = document.getElementById("viewport");
+  globals.cursor = document.getElementById("cursorDot");
+  globals.cursorView = document.getElementById("cursorView");
   globals.paper.addEventListener("mousedown", startDraw);
   globals.paper.addEventListener("mouseup", endDraw);
   globals.paper.addEventListener("mousemove", collectPoints);
+  globals.paper.addEventListener('wheel', MouseWheelHandler);
+  globals.paper.addEventListener('contextmenu', rightClickPan, false);
   readSVGTree();
 }
 
@@ -45,12 +52,11 @@ function setPortSize(){
 
 function startDraw(){
   globals.isDrawing = true;
-  globals.currDraw = document.getElementById("svgPort").innerHTML;
 }
 
 function endDraw(){
   var thisDraw = document.getElementById("currentDrawing");
-  thisDraw.setAttribute("points", "0,300 300,300");
+  thisDraw.setAttribute("points", "0,0 0,0");
   var poly = "";
   for(var i=0; i<globals.points.length; i++){
     if(i===0 || i===globals.points.length-1 || i%globals.smoothing === 0){
@@ -62,19 +68,23 @@ function endDraw(){
   globals.drawing.push(globals.points);
   updateElementTree(el);
   globals.points = [];
-  document.getElementById("svgPort").innerHTML = globals.currDraw + poly;
+  globals.currDraw.innerHTML = globals.currDraw.innerHTML + poly;
   globals.currentElement +=1;
   globals.isDrawing = false;
 
 }
 
 function collectPoints(){
+  //globals.cursor = document.getElementById("cursorDot");
+  globals.cursor.setAttribute('cx', event.offsetX);
+  globals.cursor.setAttribute('cy', event.offsetY);
   if(globals.isDrawing){
-
     //var myCoordinates = getRelativeCoordinates(event, globals.paper );
     var point = " " + event.offsetX + "," + event.offsetY;
     globals.points.push(point);
     refreshDraw();
+  } else {
+
   }
 
 }
@@ -95,4 +105,80 @@ function refreshDraw(){
       //}
     }
     thisDraw.setAttribute("points", poly);
+}
+
+//interface
+/* Constants: */
+var leftArrow  = 37;	// Key code for the left arrow key.
+var upArrow    = 38;
+var rightArrow = 39;
+var downArrow  = 40;
+var plus = 187;
+var minus = 189;
+
+function getViewBox(){
+  var viewBox = globals.paper.getAttribute('viewBox');
+  var viewBoxValues = viewBox.split(' ');
+  viewBoxValues[0] = parseFloat(viewBoxValues[0]);
+  viewBoxValues[1] = parseFloat(viewBoxValues[1]);
+  return viewBoxValues;
+}
+
+function processKeyPress(evt)
+{
+  var viewBoxValues = getViewBox();
+
+  switch (evt.keyCode)
+  {
+    case leftArrow:
+      viewBoxValues[0] += globals.panRate;	// Increase the x-coordinate value of the viewBox attribute by the amount given by panRate.
+      break;
+    case rightArrow:
+      viewBoxValues[0] -= globals.panRate;	// Decrease the x-coordinate value of the viewBox attribute by the amount given by panRate.
+      break;
+    case upArrow:
+      viewBoxValues[1] += globals.panRate;	// Increase the y-coordinate value of the viewBox attribute by the amount given by panRate.          break;
+      break;
+    case downArrow:
+      viewBoxValues[1] -= globals.panRate;	// Decrease the y-coordinate value of the viewBox attribute by the amount given by panRate.          break;
+      break;
+    case plus:
+    globals.currentZoom += globals.zoomRate;
+    break;
+    case minus:
+    globals.currentZoom -= globals.zoomRate;
+    break;
+  } // switch
+  globals.currentViewBox = viewBoxValues.join(' ');
+  setPan();
+  setZoom();
+	// Convert the viewBoxValues array into a string with a white space character between the given values.
+}
+
+function setPan(){
+  if(globals.currentViewBox!=""){
+    globals.paper.setAttribute('viewBox', globals.currentViewBox);
+  }
+}
+
+function setZoom(){
+  globals.currDraw.setAttribute('transform',"scale("+ globals.currentZoom +")");
+  globals.cursorView.setAttribute('transform',"scale("+ globals.currentZoom +")");
+}
+
+function rightClickPan(){
+    event.preventDefault();
+    globals.isDrawing = false;
+    var startX = event.offsetX;
+    var startY = event.offsetY;
+
+}
+
+function MouseWheelHandler(e) {
+	// cross-browser wheel delta
+	var e = window.event || e; // old IE support
+	var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+  delta = delta * globals.zoomRate;
+  globals.currentZoom += delta;
+  setZoom();
 }
