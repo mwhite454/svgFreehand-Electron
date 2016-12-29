@@ -12,20 +12,35 @@ var globals = {
 window.addEventListener("load", function(){
   globals.currDraw = document.getElementById("svgPort").innerHTML;
   globals.paper = document.getElementById('svgPort');
+  globals.desk = document.getElementById('desk');
+  prepPort();
   //set svgPort width and height based on window size
-  setPortSize();
+  //setPortSize();
 });
 
-document.getElementById("svgPort").addEventListener("mousedown", startDraw);
-document.getElementById("svgPort").addEventListener("mouseup", endDraw);
-document.getElementById("svgPort").addEventListener("mousemove", collectPoints);
+function prepPort(){
+  if(globals.desk.hasChildNodes()){
+    var children = globals.desk.childNodes;
+    for(var i=0; i< children.length; i++){
+      if(children[i].nodeName === "svg"){
+        children[i].setAttribute('id', 'svgPort');
+      }
+    }
+
+  }
+  globals.paper = document.getElementById('svgPort');
+  globals.paper.addEventListener("mousedown", startDraw);
+  globals.paper.addEventListener("mouseup", endDraw);
+  globals.paper.addEventListener("mousemove", collectPoints);
+  readSVGTree();
+}
+
 
 function setPortSize(){
-  var port = document.getElementById("svgPort");
   var width = window.innerWidth;
   var height = window.innerHeight;
-  port.setAttribute("width", width-300);
-  port.setAttribute("height", height-200);
+  globals.paper.setAttribute("width", width-300);
+  globals.paper.setAttribute("height", height-200);
 }
 
 function startDraw(){

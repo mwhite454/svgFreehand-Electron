@@ -6,3 +6,7 @@
 #svgPort {
   cursor: crosshair;
 }
+
+header h1{
+  display: inline;
+}

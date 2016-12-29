@@ -17,22 +17,21 @@
   <div class="window container">
     <header class="toolbar toolbar-header row">
         <h1 class="title col-md-6"> SVG Freehand </h1>
-
         <div class="toolbar-actions col-md-9">
         <div class="btn-group col-md-5">
-          <button type="button" id="select-file" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Open File">
+          <button id="select-file" class="btn btn-default">
             <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span>
           </button>
-          <button type="button" id="save-changes" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Save Current File">
+          <button class="btn btn-default">
             <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span>
           </button>
-          <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Copy">
+          <button class="btn btn-default">
             <span class="glyphicon glyphicon-copy"></span>
           </button>
-          <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Paste">
+          <button class="btn btn-default">
             <span class="glyphicon glyphicon-paste"></span>
           </button>
-          <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Clear SVG">
+          <button class="btn btn-default">
             <span class="glyphicon glyphicon-erase"></span>
           </button>
         </div>
@@ -41,7 +40,7 @@
     <div class="window-content row">
       <div class="pane-group">
         <div class="pane col-md-8">
-          <main id="desk">
+          <main>
             <svg width="300" height="300" id="svgPort"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink" style="background: cyan">
@@ -54,34 +53,14 @@
           <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="headingOne">
               <h4 class="panel-title">
-                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#fileDetails" aria-expanded="true" aria-controls="fileDetails">
-                  File Details
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Collapsible Group Item #1
                 </a>
               </h4>
             </div>
-            <div id="fileDetails" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="fileDetails">
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
               <div class="panel-body">
-                <form>
-                  <div class="form-group">
-                    <label for="actual-file">File Name</label>
-                    <input type="text" class="form-control" id="actual-file" placeholder="fileName">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <input type="file" id="exampleInputFile">
-                    <p class="help-block">Example block-level help text here.</p>
-                  </div>
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Check me out
-                    </label>
-                  </div>
-                  <button type="submit" class="btn btn-default">Submit</button>
-              </form>
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
               </div>
             </div>
           </div>
@@ -124,31 +103,19 @@
    </footer>-->
   </div>
   <script>
-    require('./js/fileSystem.js');
-    require('./js/svg-pan-zoom.js')
+  var remote = require('remote');
+  //var app = require('electron').remote;
+  const dialog = require('electron').remote;
+  var fs = require('fs');
 
+  document.getElementById('select-file').addEventListener('click', openFileDialog);
     // You can also require other files to run in this process
     require('./renderer.js')
-
-    svgPanZoom('#svgPort', {
-  panEnabled: false
-, controlIconsEnabled: true
-, zoomEnabled: true
-, dblClickZoomEnabled: true
-, mouseWheelZoomEnabled: true
-, preventMouseEventsDefault: true
-, zoomScaleSensitivity: 0.2
-, minZoom: 0.5
-, maxZoom: 10
-, fit: true
-, contain: false
-, center: true
-, refreshRate: 'auto'
-});
   </script>
 </script>
   <script>window.$ = window.jQuery = require('jquery');</script>
   <script src="./js/bootstrap.js"></script>
+    <script language="javascript" type="text/javascript" src="js/fileSystem.js"></script>
   <script language="javascript" type="text/javascript" src="js/svgFree.js"></script>
   <script language="javascript" type="text/javascript" src="js/elementTree.js"></script>
 
